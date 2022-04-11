@@ -1,0 +1,2 @@
+# PrjktZesp
+Projekt Zespołowy - Strażak
