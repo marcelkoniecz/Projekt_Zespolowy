@@ -80,17 +80,41 @@ uint16_t south=0;
 uint16_t east = 4000;
 uint16_t west=0;
 
+#define RX_BUFFER_LEN 1
+#define TX_BUFFER_LEN 3
+
+char TX_BUFFER[TX_BUFFER_LEN]={0};
+uint8_t RX_BUFFER[RX_BUFFER_LEN]={0};
+
 uint8_t calculateDirection(uint32_t measurement_y, uint32_t measurement_x)
 {
 	if(abs(measurement_y-north) < eps)
-		return 1;
+		return '1';
 	else if(abs(measurement_y-south) < eps)
-		return 3;
+		return '3';
 	else if(abs(measurement_x-west) < eps)
-		return 4;
+		return '4';
 	else if(abs(measurement_x-east) < eps)
-		return 2;
-	else return 0;
+		return '2';
+	else return '0';
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if(huart->Instance == huart1.Instance)
+    {
+    	if(RX_BUFFER[0] == '1')
+    	{
+//    		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, 1);
+    		printf("got 1\r\n");
+    	}
+    	else if(RX_BUFFER[0] == '0')
+    	{
+//    		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, 0);
+    		printf("got 0\r\n");
+    	}
+    	HAL_UART_Receive_IT(&huart1, RX_BUFFER, 1);
+    }
 }
 /* USER CODE END 0 */
 
@@ -123,10 +147,10 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
-  MX_UART4_Init();
   MX_DMA_Init();
   MX_ADC1_Init();
   MX_SPI2_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   /**
    * value array stands for measurements from joystick
@@ -136,7 +160,7 @@ int main(void)
   volatile static uint16_t value[2];
   HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)value, 2);
-
+  HAL_UART_Receive_IT(&huart1, RX_BUFFER, 1);
 //  wchar_t text_direction[15];
   lcd_init();
 
@@ -146,14 +170,22 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//	  printf("Dir: %d\n", calculateDirection(value[0],value[1]));
+	  printf("Dir: %c\n", calculateDirection(value[0],value[1]));
 //	  sprintf(text_direction,"Direction: %d",calculateDirection(value[0],value[1]));
 //	  sprintf(text_direction,"Direction:%d",1);
 	  wchar_t  ws[20];
-	  swprintf(ws, 20, L"%hs%d", "Direction: ",calculateDirection(value[0],value[1]));
+	  swprintf(ws, 20, L"%hs%c", "Direction: ",calculateDirection(value[0],value[1]));
 	  hagl_put_text(ws,30,30,YELLOW,font6x9);
 	  lcd_copy();
-	  HAL_Delay(500);
+//	  TX_BUFFER[0]=(char)calculateDirection(value[0],value[1]);
+	  char dir = calculateDirection(value[0],value[1]);
+	  TX_BUFFER[0]=dir;
+	  TX_BUFFER[1]='\r';
+	  TX_BUFFER[2]='\n';
+	  HAL_UART_Transmit(&huart1, (uint8_t*)TX_BUFFER, TX_BUFFER_LEN, 100);
+//	  printf("test\r\n");
+	  HAL_Delay(250);
+//	  HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
