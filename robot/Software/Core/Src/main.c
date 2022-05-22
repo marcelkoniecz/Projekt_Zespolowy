@@ -207,7 +207,7 @@ int main(void) {
 	HAL_UART_Receive_DMA(&huart1, RX_BUFFER, BUFFER_LEN);
 //  HAL_UART_Receive_IT(&huart1, RX_BUFFER, BUFFER_LEN);
 
-	uint8_t TX_BUFFER = 0;
+//	uint8_t TX_BUFFER = 0;
 
 //	HAL_TIM_Base_Start(&htim6);
 //	if (ds18b20_init() != HAL_OK) {
@@ -230,6 +230,9 @@ int main(void) {
 			HAL_GPIO_ReadPin(LeftSensor_GPIO_Port, LeftSensor_Pin);
 			HAL_GPIO_ReadPin(CenterSensor_GPIO_Port, CenterSensor_Pin);
 			HAL_GPIO_ReadPin(RightSensor_GPIO_Port, RightSensor_Pin);
+			if (direct == '4') {
+				MotorControler(0, 0, 0, 0, 0, 0);
+			}
 			interruptFlag = 0;
 
 		}
@@ -257,7 +260,9 @@ int main(void) {
 					MotorControler(1, 0, 0, 0, speed, 0);
 					break;
 				case '4':
-					MotorControler(1, 0, 1, 0, speed, speed);
+					if (checkCenterObstacle() && checkLeftObstacle() && checkRightObstacle()) {
+						MotorControler(1, 0, 1, 0, speed, speed);
+					}
 				default:
 					break;
 				}
