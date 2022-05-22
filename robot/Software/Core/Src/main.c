@@ -251,6 +251,12 @@ int main(void)
 		  }
 	  }
 
+	  if (HAL_GPIO_ReadPin(GAS_IN_GPIO_Port, GAS_IN_Pin) == GPIO_PIN_RESET) {
+	  	printf("No gas\r\n");
+	  } else {
+	  	printf("Gas\r\n");
+	  }
+
 
     /* USER CODE END WHILE */
 
