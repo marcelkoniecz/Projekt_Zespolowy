@@ -46,8 +46,8 @@ ProjektZespolowy.bin \
 all: ProjektZespolowy.elf secondary-outputs
 
 # Tool invocations
-ProjektZespolowy.elf: $(OBJS) $(USER_OBJS) C:\Users\jakub\OneDrive\Desktop\Studia\Studia_6_sem_3_rok\PZ\github\Projekt_Zespolowy\robot\Software\STM32F303K8TX_FLASH.ld
-	arm-none-eabi-gcc -o "ProjektZespolowy.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\jakub\OneDrive\Desktop\Studia\Studia_6_sem_3_rok\PZ\github\Projekt_Zespolowy\robot\Software\STM32F303K8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ProjektZespolowy.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+ProjektZespolowy.elf: $(OBJS) $(USER_OBJS) /home/marcel/Documents/semestrVI/Projekt_Zespolowy/robot/Software/STM32F303K8TX_FLASH.ld
+	arm-none-eabi-gcc -o "ProjektZespolowy.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/marcel/Documents/semestrVI/Projekt_Zespolowy/robot/Software/STM32F303K8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ProjektZespolowy.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

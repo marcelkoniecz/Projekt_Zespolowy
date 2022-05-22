@@ -68,6 +68,8 @@ void Error_Handler(void);
 #define MotorAIN1_GPIO_Port GPIOA
 #define VCP_TX_Pin GPIO_PIN_2
 #define VCP_TX_GPIO_Port GPIOA
+#define DS_Pin GPIO_PIN_3
+#define DS_GPIO_Port GPIOA
 #define GAS_IN_Pin GPIO_PIN_6
 #define GAS_IN_GPIO_Port GPIOA
 #define BT_Enable_Pin GPIO_PIN_7
