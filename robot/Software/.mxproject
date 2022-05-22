@@ -9,17 +9,17 @@ CDefines=USE_HAL_DRIVER;STM32F303x8;USE_HAL_DRIVER;USE_HAL_DRIVER;
 [PreviousGenFiles]
 AdvancedFolderStructure=true
 HeaderFileListSize=3
-HeaderFiles#0=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/Software/Core/Inc/stm32f3xx_it.h
-HeaderFiles#1=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/Software/Core/Inc/stm32f3xx_hal_conf.h
-HeaderFiles#2=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/Software/Core/Inc/main.h
+HeaderFiles#0=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/github/Projekt_Zespolowy/robot/Software/Core/Inc/stm32f3xx_it.h
+HeaderFiles#1=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/github/Projekt_Zespolowy/robot/Software/Core/Inc/stm32f3xx_hal_conf.h
+HeaderFiles#2=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/github/Projekt_Zespolowy/robot/Software/Core/Inc/main.h
 HeaderFolderListSize=1
-HeaderPath#0=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/Software/Core/Inc
+HeaderPath#0=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/github/Projekt_Zespolowy/robot/Software/Core/Inc
 HeaderFiles=;
 SourceFileListSize=3
-SourceFiles#0=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/Software/Core/Src/stm32f3xx_it.c
-SourceFiles#1=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/Software/Core/Src/stm32f3xx_hal_msp.c
-SourceFiles#2=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/Software/Core/Src/main.c
+SourceFiles#0=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/github/Projekt_Zespolowy/robot/Software/Core/Src/stm32f3xx_it.c
+SourceFiles#1=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/github/Projekt_Zespolowy/robot/Software/Core/Src/stm32f3xx_hal_msp.c
+SourceFiles#2=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/github/Projekt_Zespolowy/robot/Software/Core/Src/main.c
 SourceFolderListSize=1
-SourcePath#0=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/Software/Core/Src
+SourcePath#0=C:/Users/jakub/OneDrive/Desktop/Studia/Studia_6_sem_3_rok/PZ/github/Projekt_Zespolowy/robot/Software/Core/Src
 SourceFiles=;
 
