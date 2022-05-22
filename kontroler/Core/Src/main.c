@@ -81,7 +81,7 @@ uint16_t east = 4000;
 uint16_t west=0;
 
 #define RX_BUFFER_LEN 1
-#define TX_BUFFER_LEN 3
+#define TX_BUFFER_LEN 1
 
 char TX_BUFFER[TX_BUFFER_LEN]={0};
 uint8_t RX_BUFFER[RX_BUFFER_LEN]={0};
@@ -158,6 +158,8 @@ int main(void)
    * value[1] - measurement from X-axis
    */
   volatile static uint16_t value[2];
+  uint8_t last_direction = '0';
+
   HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)value, 2);
   HAL_UART_Receive_IT(&huart1, RX_BUFFER, 1);
@@ -171,21 +173,16 @@ int main(void)
   while (1)
   {
 	  printf("Dir: %c\n", calculateDirection(value[0],value[1]));
-//	  sprintf(text_direction,"Direction: %d",calculateDirection(value[0],value[1]));
-//	  sprintf(text_direction,"Direction:%d",1);
 	  wchar_t  ws[20];
 	  swprintf(ws, 20, L"%hs%c", "Direction: ",calculateDirection(value[0],value[1]));
-	  hagl_put_text(ws,30,30,YELLOW,font6x9);
+	  hagl_put_text(ws,0,0,YELLOW,font6x9);
 	  lcd_copy();
-//	  TX_BUFFER[0]=(char)calculateDirection(value[0],value[1]);
-	  char dir = calculateDirection(value[0],value[1]);
-	  TX_BUFFER[0]=dir;
-	  TX_BUFFER[1]='\r';
-	  TX_BUFFER[2]='\n';
-	  HAL_UART_Transmit(&huart1, (uint8_t*)TX_BUFFER, TX_BUFFER_LEN, 100);
-//	  printf("test\r\n");
-	  HAL_Delay(250);
-//	  HAL_Delay(500);
+	  TX_BUFFER[0]=(char)calculateDirection(value[0],value[1]);
+	  if (last_direction != TX_BUFFER[0]) {
+		  HAL_UART_Transmit(&huart1, (uint8_t*)TX_BUFFER, TX_BUFFER_LEN, 100);
+	  }
+	  last_direction = TX_BUFFER[0];
+	  HAL_Delay(10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
