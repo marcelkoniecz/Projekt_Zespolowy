@@ -80,6 +80,8 @@ uint16_t south=0;
 uint16_t east = 4000;
 uint16_t west=0;
 
+volatile int rx_uart_flag = 0;
+
 #define RX_BUFFER_LEN 1
 #define TX_BUFFER_LEN 1
 
@@ -101,18 +103,9 @@ uint8_t calculateDirection(uint32_t measurement_y, uint32_t measurement_x)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    if(huart->Instance == huart1.Instance)
+    if(huart == &huart1)
     {
-    	if(RX_BUFFER[0] == '1')
-    	{
-//    		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, 1);
-    		printf("got 1\r\n");
-    	}
-    	else if(RX_BUFFER[0] == '0')
-    	{
-//    		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, 0);
-    		printf("got 0\r\n");
-    	}
+    	rx_uart_flag = 1;
     	HAL_UART_Receive_IT(&huart1, RX_BUFFER, 1);
     }
 }
@@ -165,6 +158,7 @@ int main(void)
   HAL_UART_Receive_IT(&huart1, RX_BUFFER, 1);
 //  wchar_t text_direction[15];
   lcd_init();
+  wchar_t  ws[20];
 
   /* USER CODE END 2 */
 
@@ -173,7 +167,6 @@ int main(void)
   while (1)
   {
 	  printf("Dir: %c\n", calculateDirection(value[0],value[1]));
-	  wchar_t  ws[20];
 	  swprintf(ws, 20, L"%hs%c", "Direction: ",calculateDirection(value[0],value[1]));
 	  hagl_put_text(ws,0,0,YELLOW,font6x9);
 	  lcd_copy();
@@ -183,6 +176,20 @@ int main(void)
 	  }
 	  last_direction = TX_BUFFER[0];
 	  HAL_Delay(10);
+
+	  if (rx_uart_flag == 1) {
+		  rx_uart_flag = 0;
+		  if (RX_BUFFER[0] == 0) {
+			  printf("Gas: No\r\n");
+			  swprintf(ws, 20, L"%hs", "Gas: N");
+		  } else {
+			  printf("Gas: Yes\r\n");
+			  swprintf(ws, 20, L"%hs", "Gas: Y");
+		  }
+
+		  hagl_put_text(ws,0,10,YELLOW,font6x9);
+		  lcd_copy();
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

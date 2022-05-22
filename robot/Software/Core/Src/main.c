@@ -206,6 +206,8 @@ int main(void)
   HAL_UART_Receive_DMA(&huart1, RX_BUFFER, BUFFER_LEN);
 //  HAL_UART_Receive_IT(&huart1, RX_BUFFER, BUFFER_LEN);
 
+  uint8_t TX_BUFFER = 0;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -251,13 +253,14 @@ int main(void)
 		  }
 	  }
 
-	  if (HAL_GPIO_ReadPin(GAS_IN_GPIO_Port, GAS_IN_Pin) == GPIO_PIN_RESET) {
-	  	printf("No gas\r\n");
-	  } else {
-	  	printf("Gas\r\n");
-	  }
+	 if (HAL_GPIO_ReadPin(GAS_IN_GPIO_Port, GAS_IN_Pin) == GPIO_PIN_RESET) {
+		 TX_BUFFER = 0;
+	 } else {
+		 TX_BUFFER = 1;
+	 }
+	 HAL_UART_Transmit(&huart1, &TX_BUFFER, 1, 100);
 
-
+	 HAL_Delay(10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
