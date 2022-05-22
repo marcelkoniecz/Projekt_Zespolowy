@@ -23,11 +23,13 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-#define BUFFER_LEN  5
+#define BUFFER_LEN  1
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -51,7 +53,7 @@ volatile int interruptFlagUART = 0;
 volatile int pwm_duty = 0;
 volatile uint8_t direct = 0;
 volatile unsigned int speed = 300;
-uint8_t RX_BUFFER[BUFFER_LEN] = {0};
+uint8_t RX_BUFFER[BUFFER_LEN + 1] = {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -80,26 +82,16 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     	interruptFlag = 1;
     }
 }
-/*
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-
-	HAL_UART_Receive_DMA(&huart1, Received, 5);
-	HAL_UART_Transmit(&huart2, Received, sizeof(Received), 200);
-	HAL_UART_Transmit_DMA(&huart1,"jeden",strlen("jeden"));
-	interruptFlagUART = 1;
-}*/
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == huart1.Instance)
 	{
-
-		HAL_UART_Transmit(&huart2, RX_BUFFER, BUFFER_LEN, 100);
+		interruptFlagUART = 1;
 		direct = RX_BUFFER[0];
+//		speed = atoi((char*)&RX_BUFFER[2]);
+		speed = 200;
 
-		RX_BUFFER[0]= ' ';
-		RX_BUFFER[1]= ' ';
-		speed = atoi(RX_BUFFER);
 		HAL_UART_Receive_DMA(&huart1, RX_BUFFER, BUFFER_LEN);
 	}
 }
@@ -129,47 +121,47 @@ int checkCenterObstacle(){
 
 }
 
-void avoidingObstacle(){
-	MotorControler(1, 0, 1, 0, 300, 300);
-	if((!checkLeftObstacle() && !checkCenterObstacle() && !checkRightObstacle())||(checkLeftObstacle() && !checkCenterObstacle() && checkRightObstacle())){
-		MotorControler(0, 0, 0, 0, 300, 300);
-		HAL_Delay(300);
-		while((!checkLeftObstacle() && !checkCenterObstacle() && !checkRightObstacle())||(checkLeftObstacle() && !checkCenterObstacle() && checkRightObstacle())){
-			MotorControler(0, 1, 0, 1, 300, 300);
-		}
-		MotorControler(1, 0, 0, 1, 500, 500);
-		HAL_Delay(1000);
-	}
-
-	if(checkLeftObstacle() && !checkCenterObstacle() && !checkRightObstacle()){
-		MotorControler(0, 0, 0, 0, 300, 300);
-		HAL_Delay(300);
-		while(checkLeftObstacle() && !checkCenterObstacle() && !checkRightObstacle()){
-			MotorControler(0, 1, 0, 1, 300, 300);
-		}
-		MotorControler(1, 0, 0, 1, 500, 500);
-		HAL_Delay(1000);
-	}
-
-	if(!checkLeftObstacle() && !checkCenterObstacle() && checkRightObstacle()){
-		MotorControler(0, 0, 0, 0, 300, 300);
-		HAL_Delay(300);
-		while(!checkLeftObstacle() && !checkCenterObstacle() && checkRightObstacle()){
-			MotorControler(0, 1, 0, 1, 300, 300);
-		}
-		MotorControler(0, 1, 1, 0, 500, 500);
-		HAL_Delay(1000);
-		}
-
-	if(checkLeftObstacle() && checkCenterObstacle() && !checkRightObstacle()){
-		MotorControler(1, 0, 0, 1, 800, 0);
-		HAL_Delay(20);
-	}
-	if(!checkLeftObstacle() && checkCenterObstacle() && checkRightObstacle()){
-		MotorControler(0, 1, 1, 0, 0, 800);
-		HAL_Delay(20);
-	}
-}
+//void avoidingObstacle(){
+//	MotorControler(1, 0, 1, 0, 300, 300);
+//	if((!checkLeftObstacle() && !checkCenterObstacle() && !checkRightObstacle())||(checkLeftObstacle() && !checkCenterObstacle() && checkRightObstacle())){
+//		MotorControler(0, 0, 0, 0, 300, 300);
+//		HAL_Delay(300);
+//		while((!checkLeftObstacle() && !checkCenterObstacle() && !checkRightObstacle())||(checkLeftObstacle() && !checkCenterObstacle() && checkRightObstacle())){
+//			MotorControler(0, 1, 0, 1, 300, 300);
+//		}
+//		MotorControler(1, 0, 0, 1, 500, 500);
+//		HAL_Delay(1000);
+//	}
+//
+//	if(checkLeftObstacle() && !checkCenterObstacle() && !checkRightObstacle()){
+//		MotorControler(0, 0, 0, 0, 300, 300);
+//		HAL_Delay(300);
+//		while(checkLeftObstacle() && !checkCenterObstacle() && !checkRightObstacle()){
+//			MotorControler(0, 1, 0, 1, 300, 300);
+//		}
+//		MotorControler(1, 0, 0, 1, 500, 500);
+//		HAL_Delay(1000);
+//	}
+//
+//	if(!checkLeftObstacle() && !checkCenterObstacle() && checkRightObstacle()){
+//		MotorControler(0, 0, 0, 0, 300, 300);
+//		HAL_Delay(300);
+//		while(!checkLeftObstacle() && !checkCenterObstacle() && checkRightObstacle()){
+//			MotorControler(0, 1, 0, 1, 300, 300);
+//		}
+//		MotorControler(0, 1, 1, 0, 500, 500);
+//		HAL_Delay(1000);
+//		}
+//
+//	if(checkLeftObstacle() && checkCenterObstacle() && !checkRightObstacle()){
+//		MotorControler(1, 0, 0, 1, 800, 0);
+//		HAL_Delay(20);
+//	}
+//	if(!checkLeftObstacle() && checkCenterObstacle() && checkRightObstacle()){
+//		MotorControler(0, 1, 1, 0, 0, 800);
+//		HAL_Delay(20);
+//	}
+//}
 
 /* USER CODE END 0 */
 
@@ -212,7 +204,7 @@ int main(void)
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
   HAL_GPIO_WritePin(BT_Enable_GPIO_Port, BT_Enable_Pin, GPIO_PIN_RESET);
   HAL_UART_Receive_DMA(&huart1, RX_BUFFER, BUFFER_LEN);
-  //HAL_UART_Receive_IT(&huart1, RX_BUFFER, BUFFER_LEN);
+//  HAL_UART_Receive_IT(&huart1, RX_BUFFER, BUFFER_LEN);
 
   /* USER CODE END 2 */
 
@@ -229,27 +221,36 @@ int main(void)
 
 	  }
 
-	  if(speed < 999 && speed >= 0){
-	  	  switch (direct) {
-			case '0':
-				MotorControler(0, 0, 0, 0, 0, 0);
-			break;
-			case '1':
-				MotorControler(1, 0, 0, 0, speed , 0);
-			break;
-			case '2':
-				MotorControler(0, 0, 1, 0, 0, speed );
-			break;
-			case '3':
-				MotorControler(1, 0, 1, 0, speed , speed );
-			break;
-			case '4':
-				MotorControler(0, 1, 0, 1, speed, speed);
-			default:
-			break;
-	  	  }
-}
-	  HAL_Delay(200);
+	  if (interruptFlagUART == 1) {
+		  interruptFlagUART = 0;
+
+		  HAL_UART_Transmit(&huart2, (uint8_t*)&direct, 1, 100);
+		  char str[10];
+		  sprintf(str, " %d\r\n", speed);
+		  printf(str);
+
+		  if(speed < 999 && speed >= 0){
+			  switch (direct) {
+			  	  case '0':
+			  		  MotorControler(0, 0, 0, 0, 0, 0);
+			  		  break;
+			  	  case '1':
+			  		  MotorControler(0, 0, 1, 0, 0, speed);
+			  		  break;
+			  	  case '2':
+			  		  MotorControler(0, 1, 0, 1, speed, speed);
+			  		  break;
+			  	  case '3':
+			  		  MotorControler(1, 0, 0, 0, speed, 0);
+			  		  break;
+			  	  case '4':
+			  		  MotorControler(1, 0, 1, 0, speed, speed);
+			  	  default:
+			  		  break;
+			  }
+		  }
+	  }
+
 
     /* USER CODE END WHILE */
 
