@@ -209,21 +209,21 @@ int main(void) {
 
 	uint8_t TX_BUFFER = 0;
 
-	HAL_TIM_Base_Start(&htim6);
-	if (ds18b20_init() != HAL_OK) {
-		Error_Handler();
-	}
+//	HAL_TIM_Base_Start(&htim6);
+//	if (ds18b20_init() != HAL_OK) {
+//		Error_Handler();
+//	}
 
-	uint8_t ds1[DS18B20_ROM_CODE_SIZE];
+//	uint8_t ds1[DS18B20_ROM_CODE_SIZE];
 
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
-		ds18b20_start_measure(NULL);
-		HAL_Delay(10);
-		temp = ds18b20_get_temp(NULL);
+//		ds18b20_start_measure(NULL);
+//		HAL_Delay(10);
+//		temp = ds18b20_get_temp(NULL);
 
 		if (interruptFlag == 1) {
 			HAL_Delay(10);
@@ -264,12 +264,12 @@ int main(void) {
 			}
 		}
 
-		if (HAL_GPIO_ReadPin(GAS_IN_GPIO_Port, GAS_IN_Pin) == GPIO_PIN_RESET) {
-			TX_BUFFER = 0;
-		} else {
-			TX_BUFFER = 1;
-		}
-		HAL_UART_Transmit(&huart1, &TX_BUFFER, 1, 100);
+//		if (HAL_GPIO_ReadPin(GAS_IN_GPIO_Port, GAS_IN_Pin) == GPIO_PIN_RESET) {
+//			TX_BUFFER = 0;
+//		} else {
+//			TX_BUFFER = 1;
+//		}
+//		HAL_UART_Transmit(&huart1, &TX_BUFFER, 1, 100);
 
 		HAL_Delay(10);
 		/* USER CODE END WHILE */

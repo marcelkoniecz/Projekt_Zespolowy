@@ -177,19 +177,27 @@ int main(void)
 	  last_direction = TX_BUFFER[0];
 	  HAL_Delay(10);
 
-	  if (rx_uart_flag == 1) {
-		  rx_uart_flag = 0;
-		  if (RX_BUFFER[0] == 0) {
-			  printf("Gas: No\r\n");
-			  swprintf(ws, 20, L"%hs", "Gas: N");
-		  } else {
-			  printf("Gas: Yes\r\n");
-			  swprintf(ws, 20, L"%hs", "Gas: Y");
-		  }
+//	  if (rx_uart_flag == 1) {
+//		  rx_uart_flag = 0;
+//		  if (RX_BUFFER[0] == 0) {
+//			  printf("Gas: No\r\n");
+//			  swprintf(ws, 20, L"%hs", "Gas: N");
+//		  } else {
+//			  printf("Gas: Yes\r\n");
+//			  swprintf(ws, 20, L"%hs", "Gas: Y");
+//		  }
+//
+//		  hagl_put_text(ws,0,10,YELLOW,font6x9);
+//		  swprintf(ws, 20, L"%hs", "Temperature: 20");
+//		  hagl_put_text(ws,0,20,YELLOW,font6x9);
+//		  lcd_copy();
+//	  }
 
-		  hagl_put_text(ws,0,10,YELLOW,font6x9);
-		  lcd_copy();
-	  }
+	  swprintf(ws, 20, L"%hs", "Gas: N");
+	  hagl_put_text(ws,0,10,YELLOW,font6x9);
+	  swprintf(ws, 20, L"%hs", "Temperature: 20");
+	  hagl_put_text(ws,0,20,YELLOW,font6x9);
+	  lcd_copy();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
