@@ -159,6 +159,8 @@ int main(void)
 //  wchar_t text_direction[15];
   lcd_init();
   wchar_t  ws[20];
+  float temp[10] = {20.0, 20.1, 20.2, 20.0, 20.1, 20.0, 20.1, 20.1, 20.0, 20.2};
+  int temp_index = 0;
 
   /* USER CODE END 2 */
 
@@ -195,9 +197,12 @@ int main(void)
 
 	  swprintf(ws, 20, L"%hs", "Gas: N");
 	  hagl_put_text(ws,0,10,YELLOW,font6x9);
-	  swprintf(ws, 20, L"%hs", "Temperature: 20");
+	  swprintf(ws, 20, L"%hs%.2f", "Temperature: ", temp[temp_index++]);
 	  hagl_put_text(ws,0,20,YELLOW,font6x9);
 	  lcd_copy();
+	  if (temp_index >= 10) {
+		  temp_index = 0;
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
