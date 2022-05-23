@@ -82,7 +82,7 @@ uint16_t west=0;
 
 volatile int rx_uart_flag = 0;
 
-#define RX_BUFFER_LEN 1
+#define RX_BUFFER_LEN 5
 #define TX_BUFFER_LEN 1
 
 char TX_BUFFER[TX_BUFFER_LEN]={0};
@@ -106,7 +106,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     if(huart == &huart1)
     {
     	rx_uart_flag = 1;
-    	HAL_UART_Receive_IT(&huart1, RX_BUFFER, 1);
+    	HAL_UART_Receive_IT(&huart1, RX_BUFFER, RX_BUFFER_LEN);
     }
 }
 /* USER CODE END 0 */
@@ -158,7 +158,8 @@ int main(void)
   HAL_UART_Receive_IT(&huart1, RX_BUFFER, 1);
 //  wchar_t text_direction[15];
   lcd_init();
-  wchar_t  ws[20];
+  wchar_t  ws[30];
+  float temp = 0;
 
   /* USER CODE END 2 */
 
@@ -167,37 +168,34 @@ int main(void)
   while (1)
   {
 	  printf("Dir: %c\n", calculateDirection(value[0],value[1]));
-	  swprintf(ws, 20, L"%hs%c", "Direction: ",calculateDirection(value[0],value[1]));
+	  swprintf(ws, 30, L"%hs%c", "Direction: ",calculateDirection(value[0],value[1]));
 	  hagl_put_text(ws,0,0,YELLOW,font6x9);
 	  lcd_copy();
 	  TX_BUFFER[0]=(char)calculateDirection(value[0],value[1]);
-	  if (last_direction != TX_BUFFER[0]) {
-		  HAL_UART_Transmit(&huart1, (uint8_t*)TX_BUFFER, TX_BUFFER_LEN, 100);
-	  }
-	  last_direction = TX_BUFFER[0];
+	  HAL_UART_Transmit(&huart1, (uint8_t*)TX_BUFFER, TX_BUFFER_LEN, 100);
+
 	  HAL_Delay(10);
 
-//	  if (rx_uart_flag == 1) {
-//		  rx_uart_flag = 0;
-//		  if (RX_BUFFER[0] == 0) {
-//			  printf("Gas: No\r\n");
-//			  swprintf(ws, 20, L"%hs", "Gas: N");
-//		  } else {
-//			  printf("Gas: Yes\r\n");
-//			  swprintf(ws, 20, L"%hs", "Gas: Y");
-//		  }
-//
-//		  hagl_put_text(ws,0,10,YELLOW,font6x9);
-//		  swprintf(ws, 20, L"%hs", "Temperature: 20");
-//		  hagl_put_text(ws,0,20,YELLOW,font6x9);
-//		  lcd_copy();
-//	  }
+	  if (rx_uart_flag == 1) {
+		  rx_uart_flag = 0;
+		  if (RX_BUFFER[0] == 0) {
+			  printf("Gas: No\r\n");
+			  swprintf(ws, 30, L"%hs", "Gas: N");
+		  } else {
+			  printf("Gas: Yes\r\n");
+			  swprintf(ws, 30, L"%hs", "Gas: Y");
+		  }
+		  hagl_put_text(ws,0,10,YELLOW,font6x9);
 
-	  swprintf(ws, 20, L"%hs", "Gas: N");
-	  hagl_put_text(ws,0,10,YELLOW,font6x9);
-	  swprintf(ws, 20, L"%hs", "Temperature: 20");
-	  hagl_put_text(ws,0,20,YELLOW,font6x9);
-	  lcd_copy();
+		  swprintf(ws, 20, L"Temperature:           ");
+		  hagl_put_text(ws,0,20,YELLOW,font6x9);
+		  lcd_copy();
+
+		  temp = *(float*)&RX_BUFFER[1];
+		  swprintf(ws, 30, L"%hs%.2f", "Temperature: ", temp);
+		  hagl_put_text(ws,0,20,YELLOW,font6x9);
+		  lcd_copy();
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

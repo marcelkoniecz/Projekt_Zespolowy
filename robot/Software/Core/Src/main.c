@@ -55,7 +55,7 @@ volatile int interruptFlagUART = 0;
 volatile int pwm_duty = 0;
 volatile uint8_t direct = 0;
 volatile unsigned int speed = 300;
-uint8_t RX_BUFFER[BUFFER_LEN + 1] = { 0 };
+uint8_t RX_BUFFER[BUFFER_LEN] = { 0 };
 float temp;
 /* USER CODE END PV */
 
@@ -207,7 +207,10 @@ int main(void) {
 	HAL_UART_Receive_DMA(&huart1, RX_BUFFER, BUFFER_LEN);
 //  HAL_UART_Receive_IT(&huart1, RX_BUFFER, BUFFER_LEN);
 
-//	uint8_t TX_BUFFER = 0;
+	const uint8_t TX_BUF_LENGTH = 5;
+	uint8_t TX_BUFFER[TX_BUF_LENGTH];
+
+	float temp = 20;
 
 //	HAL_TIM_Base_Start(&htim6);
 //	if (ds18b20_init() != HAL_OK) {
@@ -269,12 +272,13 @@ int main(void) {
 			}
 		}
 
-//		if (HAL_GPIO_ReadPin(GAS_IN_GPIO_Port, GAS_IN_Pin) == GPIO_PIN_RESET) {
-//			TX_BUFFER = 0;
-//		} else {
-//			TX_BUFFER = 1;
-//		}
-//		HAL_UART_Transmit(&huart1, &TX_BUFFER, 1, 100);
+		if (HAL_GPIO_ReadPin(GAS_IN_GPIO_Port, GAS_IN_Pin) == GPIO_PIN_RESET) {
+			TX_BUFFER[0] = 0;
+		} else {
+			TX_BUFFER[0] = 1;
+		}
+		memcpy(&TX_BUFFER[1], &temp, 4);
+		HAL_UART_Transmit(&huart1, TX_BUFFER, TX_BUF_LENGTH, 100);
 
 		HAL_Delay(10);
 		/* USER CODE END WHILE */
